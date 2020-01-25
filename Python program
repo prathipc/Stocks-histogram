@@ -13,40 +13,31 @@ def add_ticker1(ticker):
     a=url+ticker
     response=requests.get(a)
     jsonobj=response.json()
-    #print(jsonobj)
+    #print(jsonobj)    
     df=pd.DataFrame(jsonobj)
-    #print(df)
+    
     ticker=df.iloc[0]['symbol']
     price=df.iloc[11]['profile']
-    name=df.iloc[4]['profile']
-    sector=df.iloc[13]['profile']
-    mktcap=df.iloc[10]['profile']
-    #print('COMPANY INFO')
-    #print('------------------')
     return ticker,price
 
 #ASSIGNING TICKERS TO LIST
-tickers=['AAPL','MSFT','TSLA','SPY']
+tickers=['AAPL', 'MSFT', 'ENB','MDT','TSLA','SPY']
 #CREATING DATAFRAME TO STORE VALUES
-mydata=pd.DataFrame()
 
 #RUN LOOP FOR THE LISTS
+cnt = 1
+Stcktick = []
+closingCost = []
+
 for i in tickers:
     ticker,price=add_ticker1(i)
-    #data= {'ticker':ticker,'name':name, 'sector':sector, 'price':price,'market cap':mktcap} # ANOTHER METHOD OF DATAFRAME
-    mydata[i]= ticker,price
+    Stcktick.append(ticker)
+    closingCost.append(price)
+data = {'ticker': Stcktick,
+        'Price': closingCost}
 
+mydata=pd.DataFrame(data)
+print (mydata)
 
-#PRINTS the whole data frame
-print(mydata)
-
-#PRINTS COLUMNS OR ROWS FROM DATAFRAME
-#print(mydata.iloc[1])
-
-#PLOTTING THE DATAFRAME IN HIST
-print (mydata.iloc[1].hist())
+mydata.plot.bar(x ='ticker', y='Price', rot=0)
 plt.show()
-
-
-
-
