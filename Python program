@@ -1,0 +1,52 @@
+import pandas as pd 
+import numpy as np 
+from pandas import Series, DataFrame
+import pandas_datareader 
+from pandas_datareader import data as wb 
+import requests
+import sqlite3
+import pyodbc
+import matplotlib.pyplot as plt
+
+def add_ticker1(ticker):
+    url='https://financialmodelingprep.com/api/v3/company/profile/'
+    a=url+ticker
+    response=requests.get(a)
+    jsonobj=response.json()
+    #print(jsonobj)
+    df=pd.DataFrame(jsonobj)
+    #print(df)
+    ticker=df.iloc[0]['symbol']
+    price=df.iloc[11]['profile']
+    name=df.iloc[4]['profile']
+    sector=df.iloc[13]['profile']
+    mktcap=df.iloc[10]['profile']
+    #print('COMPANY INFO')
+    #print('------------------')
+    return ticker,price
+
+#ASSIGNING TICKERS TO LIST
+tickers=['AAPL','MSFT','TSLA','SPY']
+#CREATING DATAFRAME TO STORE VALUES
+mydata=pd.DataFrame()
+
+#RUN LOOP FOR THE LISTS
+for i in tickers:
+    ticker,price=add_ticker1(i)
+    #data= {'ticker':ticker,'name':name, 'sector':sector, 'price':price,'market cap':mktcap} # ANOTHER METHOD OF DATAFRAME
+    mydata[i]= ticker,price
+
+
+#PRINTS the whole data frame
+print(mydata)
+
+#PRINTS COLUMNS OR ROWS FROM DATAFRAME
+#print(mydata.iloc[1])
+
+#PLOTTING THE DATAFRAME IN HIST
+print (mydata.iloc[1].hist())
+plt.show()
+
+
+
+
